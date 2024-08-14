@@ -91,3 +91,30 @@ const updateLocalStorage = () =>{
         tasks: state.taskList,
     }))
 }
+
+const loadInitialData=()=>{
+    const localStorageCopy = JSON.parse(localStorage.task);
+    if(localStorageCopy) state.taskList = localStorageCopy.tasks;
+
+    state.taskList.map((cardDate)=>{
+        taskContent.insertAdjacentElement("beforeend",htmlTaskContent())
+    })  
+}
+
+const handleSubmit = (event) =>{
+    const id = `${Date.now()}`
+    const input = {
+        url: document.getElementById("imageurl").value,
+        title:document.getElementById("tasktitle").value,
+        description:document.getElementById("taskDescription").value,
+        type:document.getElementById("tasktype").value,
+    };
+    if(input.title === "" || input.description === "" || input.type === ""){
+        return alert("Please fill all the mandatory fields!")
+    }
+
+    taskContent.insertAdjacentHTML("beforeend",htmlTaskContent({...input, id}));
+
+    state.taskList.push({...input,id});
+    updateLocalStorage();
+}
